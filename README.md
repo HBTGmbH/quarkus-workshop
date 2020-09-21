@@ -38,5 +38,6 @@ If you want to learn more about building native executables, please consult http
     
     sam package --template-file target/sam.native.yaml --output-template-file packaged.yaml --s3-bucket dasniko-quarkus-demo
     
-    sam deploy --template-file packaged.yaml --stack-name hbt-quarkus
+    sam deploy --template-file packaged.yaml --stack-name hbt-quarkus --capabilities CAPABILITY_IAM
+
     
