@@ -28,3 +28,15 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/quarkus-demo-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+
+
+## Used CLI commands
+
+    mvn package -Pnative
+    
+    sam local start-api --template target/sam.native.yaml
+    
+    sam package --template-file target/sam.native.yaml --output-template-file packaged.yaml --s3-bucket dasniko-quarkus-demo
+    
+    sam deploy --template-file packaged.yaml --stack-name hbt-quarkus
+    
