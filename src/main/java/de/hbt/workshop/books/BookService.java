@@ -21,7 +21,7 @@ public class BookService {
     @Inject
     DynamoDbClient ddb;
 
-    private static final String tableName = "quarkus-books";
+    private static final String tableName = "quarkus-book";
 
     Book findBook(String id) {
         Map<String, AttributeValue> item = ddb.getItem(builder -> builder.tableName(tableName)
