@@ -41,3 +41,11 @@ If you want to learn more about building native executables, please consult http
     sam deploy --template-file packaged.yaml --stack-name hbt-quarkus --capabilities CAPABILITY_IAM
 
     
+    
+    docker network create sam-local
+    docker run --network sam-local --name dynamodb -d -p 8000:8000 amazon/dynamodb-local
+    
+    aws dynamodb create-table --table-name quarkus-books --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
+    
+    sam local start-api --template target/sam.native.yaml --docker-network sam-local
+    
