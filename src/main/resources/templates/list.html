@@ -1,0 +1,40 @@
+{#include template.html}
+{#body}
+<div class="container">
+    <h1>Bücher, nichts als {total} Bücher...</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Lfd.Nr.</th>
+            <th>ID</th>
+            <th>Titel</th>
+            <th>Autor</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#for book in books}
+            <tr>
+                <td>{count}</td>
+                <td><a href="./{book.id}">{book.id}</a></td>
+                <td>{book.title}</td>
+                <td>{book.author}</td>
+            </tr>
+        {/for}
+        </tbody>
+    </table>
+    <hr/>
+    <h2>Neues Buch</h2>
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Titel</label>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <div class="form-group">
+            <label for="author">Author</label>
+            <input type="text" class="form-control" id="author" name="author">
+        </div>
+        <button type="submit" class="btn btn-primary">Absenden</button>
+    </form>
+</div>
+{/body}
+{/include}

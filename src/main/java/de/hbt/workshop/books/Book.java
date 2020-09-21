@@ -13,6 +13,9 @@ public class Book {
     private String author;
     private String title;
 
+    public Book() {
+    }
+
     public Book(String id, String title, String author) {
         this.id = id;
         this.author = author;
