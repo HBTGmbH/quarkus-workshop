@@ -28,8 +28,24 @@ functions:
       - http:
           path: /{proxy+}
           method: any
+          authorizer:
+            name: basicAuth
+            type: token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 300
     package:
       artifact: target/function.zip
+  basicAuth:
+    handler: js/basicAuthorizer.handler
+    runtime: nodejs12.x
+    memorySize: 128
+    package:
+      exclude:
+        - .idea/**
+        - .mvn/**
+        - src/**
+        - target/**
+        - '*.*ml'
 
 package:
   individually: true
@@ -50,3 +66,12 @@ resources:
           ReadCapacityUnits: 2
           WriteCapacityUnits: 2
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
+    GatewayResponse:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: 401
