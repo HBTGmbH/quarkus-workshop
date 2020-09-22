@@ -41,7 +41,7 @@ const generatePolicy = function(principalId, effect, resource) {
         const statementOne = {};
         statementOne.Action = 'execute-api:Invoke'; // default action
         statementOne.Effect = effect;
-        statementOne.Resource = resource;
+        statementOne.Resource = resource.replace(/GET/, '*');
         policyDocument.Statement[0] = statementOne;
         authResponse.policyDocument = policyDocument;
     }

@@ -46,6 +46,8 @@ functions:
         - src/**
         - target/**
         - '*.*ml'
+        - mvnw
+        - '*.*md'
 
 package:
   individually: true
