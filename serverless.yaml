@@ -1,0 +1,50 @@
+service: hbt-quarkus-demo
+
+provider:
+  name: aws
+  runtime: java11
+  stage: hbt
+  region: eu-central-1
+  endpointType: REGIONAL
+  memorySize: 1024
+  timeout: 30
+  deploymentBucket: dasniko-quarkus-demo
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:eu-central-1:029153074662:table/quarkus-books
+
+functions:
+  quarkus:
+    handler: io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+    package:
+      artifact: target/function.zip
+
+package:
+  individually: true
+
+resources:
+  Resources:
+    DynamoDBBooks:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+        TableName: quarkus-books-sls
