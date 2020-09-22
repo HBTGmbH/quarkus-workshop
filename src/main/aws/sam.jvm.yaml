@@ -1,0 +1,50 @@
+  AWSTemplateFormatVersion: '2010-09-09'
+  Transform: AWS::Serverless-2016-10-31
+  Description: AWS Serverless Quarkus HTTP - quarkus-demo-1.0.0-SNAPSHOT
+  Globals:
+    Api:
+      EndpointConfiguration: REGIONAL
+      BinaryMediaTypes:
+        - "*/*"
+
+  Resources:
+    QuarkusDemo:
+      Type: AWS::Serverless::Function
+      Properties:
+        Handler: io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest
+        Runtime: java11
+        CodeUri: ../../../target/function.zip
+        MemorySize: 1024
+        Policies:
+          - AWSLambdaBasicExecutionRole
+          - AmazonDynamoDBFullAccess
+        Timeout: 30
+        Events:
+          GetResource:
+            Type: Api
+            Properties:
+              Path: /{proxy+}
+              Method: any
+    DynamoDBBooks:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+        TableName: quarkus-books
+
+  Outputs:
+    QuarkusDemoApi:
+      Description: URL for application
+      Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+      Export:
+        Name: QuarkusDemoApi
